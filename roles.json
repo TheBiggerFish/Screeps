@@ -1,0 +1,32 @@
+{
+    "HARVESTER": {
+        "name": "harvester",
+        "count": 8,
+        "loadout": [
+            MOVE,
+            MOVE,
+            WORK,
+            CARRY
+        ]
+    },
+    "UPGRADER": {
+        "name": "upgrader",
+        "count":6,
+        "loadout": [
+            MOVE,
+            WORK,
+            WORK,
+            CARRY
+        ]
+    },
+    "BUILDER": {
+        "name": "builder",
+        "count":4,
+        "loadout": [
+            MOVE,
+            WORK,
+            WORK,
+            CARRY
+        ]
+    }
+}
