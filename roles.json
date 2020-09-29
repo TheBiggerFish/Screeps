@@ -1,32 +1,78 @@
 {
-    "HARVESTER": {
-        "name": "harvester",
-        "count": 8,
-        "loadout": [
-            MOVE,
-            MOVE,
-            WORK,
-            CARRY
-        ]
-    },
-    "UPGRADER": {
-        "name": "upgrader",
-        "count":6,
-        "loadout": [
-            MOVE,
-            WORK,
-            WORK,
-            CARRY
-        ]
-    },
-    "BUILDER": {
-        "name": "builder",
-        "count":4,
-        "loadout": [
-            MOVE,
-            WORK,
-            WORK,
-            CARRY
-        ]
+    "ROLE_PRIORITIES": [
+        "HARVESTER",
+        "UPGRADER",
+        "BUILDER",
+        "TRANSPORTER"
+    ],
+    "ROLES": {
+        "HARVESTER": {
+            "name": "harvester",
+            "count": 8,
+            "loadouts": [
+                [
+                    MOVE,
+                    MOVE,
+                    WORK,
+                    CARRY
+                ],
+                [
+                    MOVE,
+                    WORK,
+                    WORK,
+                    CARRY
+                ]
+            ]
+        },
+        "UPGRADER": {
+            "name": "upgrader",
+            "count":6,
+            "loadouts": [
+                [
+                    MOVE,
+                    MOVE,
+                    WORK,
+                    CARRY
+                ],
+                [
+                    MOVE,
+                    WORK,
+                    WORK,
+                    CARRY
+                ]
+            ]
+        },
+        "BUILDER": {
+            "name": "builder",
+            "count":4,
+            "loadouts": [
+                [
+                    MOVE,
+                    MOVE,
+                    WORK,
+                    CARRY
+                ],
+                [
+                    MOVE,
+                    WORK,
+                    WORK,
+                    CARRY
+                ]
+            ]
+        },
+        "TRANSPORTER": {
+            "name": "transporter",
+            "count":6,
+            "loadouts": [
+                [
+                    MOVE,
+                    MOVE,
+                    MOVE,
+                    CARRY,
+                    CARRY,
+                    CARRY
+                ]
+            ]
+        }
     }
 }
