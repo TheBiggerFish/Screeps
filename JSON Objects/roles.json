@@ -11,16 +11,16 @@
             "count": 8,
             "loadouts": [
                 [
-                    MOVE,
-                    MOVE,
-                    WORK,
-                    CARRY
+                    "move",
+                    "move",
+                    "work",
+                    "carry"
                 ],
                 [
-                    MOVE,
-                    WORK,
-                    WORK,
-                    CARRY
+                    "move",
+                    "work",
+                    "work",
+                    "carry"
                 ]
             ]
         },
@@ -29,16 +29,16 @@
             "count":6,
             "loadouts": [
                 [
-                    MOVE,
-                    MOVE,
-                    WORK,
-                    CARRY
+                    "move",
+                    "move",
+                    "work",
+                    "carry"
                 ],
                 [
-                    MOVE,
-                    WORK,
-                    WORK,
-                    CARRY
+                    "move",
+                    "work",
+                    "work",
+                    "carry"
                 ]
             ]
         },
@@ -47,16 +47,16 @@
             "count":4,
             "loadouts": [
                 [
-                    MOVE,
-                    MOVE,
-                    WORK,
-                    CARRY
+                    "move",
+                    "move",
+                    "work",
+                    "carry"
                 ],
                 [
-                    MOVE,
-                    WORK,
-                    WORK,
-                    CARRY
+                    "move",
+                    "work",
+                    "work",
+                    "carry"
                 ]
             ]
         },
@@ -65,12 +65,12 @@
             "count":6,
             "loadouts": [
                 [
-                    MOVE,
-                    MOVE,
-                    MOVE,
-                    CARRY,
-                    CARRY,
-                    CARRY
+                    "move",
+                    "move",
+                    "move",
+                    "carry",
+                    "carry",
+                    "carry"
                 ]
             ]
         }
