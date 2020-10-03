@@ -1,25 +1,13 @@
+var worker = require('worker');
+var factory = require('factory');
+
 module.exports.loop = function () {
-    var worker = require('worker');
-    var factory = require('factory');
     factory.produce()
-
     doMemoryConstants()
-
 
     for(var key in Game.creeps) {
         var creep = Game.creeps[key]
-        if (creep.memory.role == 'harvester') {
-            worker.harvest(creep,Game.getObjectById(Memory.SOURCES[0]),Game.spawns.Spawn1)
-        }
-        if (creep.memory.role == 'upgrader') {
-            worker.harvest(creep,Game.getObjectById(Memory.SOURCES[1]),creep.room.controller)
-        }
-        if(creep.memory.role == 'builder') {
-            worker.build(creep,Game.getObjectById(Memory.SOURCES[0]),creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES))
-        }
-        if(creep.memory.role == 'transporter') {
-            
-        }
+        worker.work(creep)
     }
 };
 
