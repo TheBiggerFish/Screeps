@@ -1,14 +1,9 @@
-/*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('factory');
- * mod.thing == 'a thing'; // true
+//Written by Cameron Haddock
+//A Screeps module for mass producing creeps
+
+/**
+ * The core factory loop
  */
-
-
-
 module.exports.produce = function() {
     for(var spawnName in Game.spawns) {
         var spawn = Game.spawns[spawnName]
@@ -21,17 +16,22 @@ module.exports.produce = function() {
         }
 
         if(spawn.memory.NEXT_SPAWN.COST == -1) {
-            spawn.memory.NEXT_SPAWN = this.findNext();
+            spawn.memory.NEXT_SPAWN = this.findNext(spawn);
         }
         
         if(spawn.memory.NEXT_SPAWN.COST > -1 && spawn.memory.NEXT_SPAWN.COST <= spawn.room.energyAvailable) {
             var x = this.create(spawn,spawn.memory.NEXT_SPAWN.ROLE,spawn.memory.NEXT_SPAWN.NAME)
-            spawn.memory.NEXT_SPAWN = this.findNext();
+            spawn.memory.NEXT_SPAWN = this.findNext(spawn);
         }
     }
 }
 
 
+/**
+ * Calculated the energy cost of a creep with the given loadout
+ * @param {String[]} loadout - What loadout to check the cost of
+ * @returns {number} - How much the creep would cost
+ */
 module.exports.determineCost = function(loadout) {
     var cost = 0
     for(var partNum in loadout) {
@@ -41,7 +41,12 @@ module.exports.determineCost = function(loadout) {
 }
 
 
-module.exports.findNext = function() {
+/**
+ * Find the next creep that a given spawn may wish to build
+ * @param {StructureSpawn} spawn - Which spawn to use
+ * @returns {Object} - A JSON object containing the cost, role, and name of the potential next creep
+ */
+module.exports.findNext = function(spawn) {
     for(var i = 0; i < Memory.NUMERICS.ROLES; i++) {
         var roleName = Memory.ROLES.ROLE_PRIORITIES[i]
         var role = Memory.ROLES.ROLES[roleName]
@@ -67,6 +72,15 @@ module.exports.findNext = function() {
 }
 
 
+
+/**
+ * Spawn a creep at a given spawn, with a given role and name
+ * @param {StructureSpawn} spawn - What spawn to create the creep at
+ * @param {String} roleName - What role to make a creep out of
+ * @param {String} name - What to name the creep being made
+ * @param {Boolean} dry - Whether to create as a dry run (Pretend to build to get return values)
+ * @returns {ScreepsReturnCode}
+ */
 module.exports.create = function(spawn,roleName,name,dry=false) {
     var role = Memory.ROLES.ROLES[roleName]
     var rv = spawn.spawnCreep(role.loadouts[0],name,{"dryRun":dry,memory:{'role':role.name,'working':true}})
@@ -76,7 +90,11 @@ module.exports.create = function(spawn,roleName,name,dry=false) {
 }
 
 
-
+/**
+ * Keep a given role at a steady number of creeps
+ * @param {String} roleName - The name of a creep role. Ex: HARVESTER
+ * @returns {Boolean}
+ */
 module.exports.maintainRole = function(roleName) {
     var creating = false
     var role = Memory.ROLES.ROLES[roleName]
