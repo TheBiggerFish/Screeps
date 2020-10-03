@@ -1,12 +1,12 @@
+//Written by Cameron Haddock
+//A Screeps module for creeps to do work
+
+
 /**
  * Perform work with the given creep
  * @param {Creep} creep 
  */
 module.exports.work = function(creep) {
-    var builder = require('role.builder');
-    var harvester = require('role.harvester');
-    var transporter = require('role.transporter');
-
     doTransportWork(creep)
     if (creep.memory.role == 'harvester') {
         this.harvest(creep,Game.getObjectById(Memory.SOURCES[0]),Game.spawns.Spawn1)
