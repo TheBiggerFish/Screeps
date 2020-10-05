@@ -14,13 +14,24 @@ module.exports.loop = function () {
 
 function doMemoryConstants() {
     //Roles: https://jsonformatter.curiousconcept.com
-    Memory.ROLES = {"ROLE_PRIORITIES":["HARVESTER","UPGRADER","BUILDER","TRANSPORTER"],"ROLES":{"HARVESTER":{"name":"harvester","count":8,"loadouts":[[MOVE,MOVE,WORK,CARRY],[MOVE,WORK,WORK,CARRY]]},"UPGRADER":{"name":"upgrader","count":10,"loadouts":[[MOVE,MOVE,WORK,CARRY],[MOVE,WORK,WORK,CARRY]]},"BUILDER":{"name":"builder","count":2,"loadouts":[[MOVE,MOVE,WORK,CARRY],[MOVE,WORK,WORK,CARRY]]},"TRANSPORTER":{"name":"transporter","count":0,"loadouts":[[MOVE,MOVE,MOVE,CARRY,CARRY,CARRY]]}}}
+    Memory.ROLES = {"HARVESTER":{"name":"harvester","count":6,"base_priority":10,"loadouts":[["move","work","work","carry"],["move","work","work","carry"]]},"UPGRADER":{"name":"upgrader","count":6,"base_priority":20,"loadouts":[["move","move","work","carry"],["move","work","work","carry"]]},"BUILDER":{"name":"builder","count":4,"base_priority":30,"loadouts":[["move","move","work","carry"],["move","work","work","carry"]]},"TRANSPORTER":{"name":"transporter","count":0,"base_priority":40,"loadouts":[["move","move","move","carry","carry","carry"]]},"MECHANIC":{"name":"mechanic","count":0,"base_priority":50,"loadouts":[["move","move","move","carry","carry","carry"]]}}
     Memory.NUMERICS.CREEP_COUNT = Object.keys(Game.creeps).length;
-    Memory.NUMERICS.ROLES = Object.keys(Memory.ROLES.ROLES).length;
+    Memory.NUMERICS.ROLES = Object.keys(Memory.ROLES).length;
 
     var expectedCreeps = 0
-    for(var roleName in Memory.ROLES.ROLES) {
-        expectedCreeps += Memory.ROLES.ROLES[roleName].count
+    for(var roleName in Memory.ROLES) {
+        expectedCreeps += Memory.ROLES[roleName].count
     }
     Memory.NUMERICS.CREEP_COUNT_EXPECTED = expectedCreeps
+
+    for(var spawnName in Game.spawns) {
+        if(!Object.keys(Memory.spawns).includes(spawnName)){
+
+            var spawn = Game.spawns[spawnName]
+            spawn.memory
+            spawn.memory.NEXT_SPAWN = {"COST":-1,"ROLE":"","NAME":""}
+            spawn.room.memory.SOURCES = spawn.room.lookForAtArea(LOOK_SOURCES,0,0,49,49,true)
+        }
+    }
+
 }
