@@ -1,78 +1,90 @@
 {
-    "ROLE_PRIORITIES": [
-        "HARVESTER",
-        "UPGRADER",
-        "BUILDER",
-        "TRANSPORTER"
-    ],
-    "ROLES": {
-        "HARVESTER": {
-            "name": "harvester",
-            "count": 8,
-            "loadouts": [
-                [
-                    "move",
-                    "move",
-                    "work",
-                    "carry"
-                ],
-                [
-                    "move",
-                    "work",
-                    "work",
-                    "carry"
-                ]
+    "HARVESTER": {
+        "name": "harvester",
+        "count": 6,
+        "base_priority": 10,
+        "loadouts": [
+            [
+                "move",
+                "move",
+                "work",
+                "carry"
+            ],
+            [
+                "move",
+                "work",
+                "work",
+                "carry"
             ]
-        },
-        "UPGRADER": {
-            "name": "upgrader",
-            "count":6,
-            "loadouts": [
-                [
-                    "move",
-                    "move",
-                    "work",
-                    "carry"
-                ],
-                [
-                    "move",
-                    "work",
-                    "work",
-                    "carry"
-                ]
+        ]
+    },
+    "UPGRADER": {
+        "name": "upgrader",
+        "count":6,
+        "base_priority": 20,
+        "loadouts": [
+            [
+                "move",
+                "move",
+                "work",
+                "carry"
+            ],
+            [
+                "move",
+                "work",
+                "work",
+                "carry"
             ]
-        },
-        "BUILDER": {
-            "name": "builder",
-            "count":4,
-            "loadouts": [
-                [
-                    "move",
-                    "move",
-                    "work",
-                    "carry"
-                ],
-                [
-                    "move",
-                    "work",
-                    "work",
-                    "carry"
-                ]
+        ]
+    },
+    "BUILDER": {
+        "name": "builder",
+        "count":4,
+        "base_priority": 30,
+        "loadouts": [
+            [
+                "move",
+                "move",
+                "work",
+                "carry"
+            ],
+            [
+                "move",
+                "work",
+                "work",
+                "carry"
             ]
-        },
-        "TRANSPORTER": {
-            "name": "transporter",
-            "count":6,
-            "loadouts": [
-                [
-                    "move",
-                    "move",
-                    "move",
-                    "carry",
-                    "carry",
-                    "carry"
-                ]
+        ]
+    },
+    "TRANSPORTER": {
+        "name": "transporter",
+        "count":0,
+        "base_priority": 40,
+        "loadouts": [
+            [
+                "move",
+                "move",
+                "move",
+                "carry",
+                "carry",
+                "carry"
             ]
-        }
+        ]
+    },
+    "MECHANIC": {
+        "name": "mechanic",
+        "count":0,
+        "base_priority": 50,
+        "loadouts": [
+            [
+                "move",
+                "move",
+                "move",
+                "carry",
+                "carry",
+                "carry"
+            ]
+        ]
     }
+
 }
