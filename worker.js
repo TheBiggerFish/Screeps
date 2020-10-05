@@ -9,16 +9,20 @@
 module.exports.work = function(creep) {
     doTransportWork(creep)
     if (creep.memory.role == 'harvester') {
-        this.harvest(creep,Game.getObjectById(Memory.SOURCES[0]),Game.spawns.Spawn1)
+        //this.harvest(creep,Game.getObjectById(creep.room.memory.SOURCES[1].source.id),creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: struct => (struct instanceof StructureContainer) || (struct instanceof StructureSpawn)}))//Game.spawns.Spawn1)
+        this.harvest(creep,Game.getObjectById(creep.room.memory.SOURCES[1].source.id),Game.spawns.Spawn1)
     }
     if (creep.memory.role == 'upgrader') {
-        this.harvest(creep,Game.getObjectById(Memory.SOURCES[1]),creep.room.controller)
+        this.upgrade(creep,Game.getObjectById(creep.room.memory.SOURCES[0].source.id))
     }
     if(creep.memory.role == 'builder') {
-        this.build(creep,Game.getObjectById(Memory.SOURCES[0]),creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES))
+        this.build(creep,Game.getObjectById(creep.room.memory.SOURCES[1].source.id),creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES))
     }
     if(creep.memory.role == 'transporter') {
-        
+        this.transport(creep,creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}}),Game.spawns.Spawn1,RESOURCE_ENERGY)
+    }
+    if(creep.memory.role == 'mechanic') {
+        this.repair(creep,creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}}),creep.pos.findClosestByPath(FIND_STRUCTURES, object => object.hits < object.hitsMax))
     }
 }
 
@@ -47,12 +51,12 @@ function doTransportWork(creep) {
  */
 module.exports.build = function(creep,source,target,resource=RESOURCE_ENERGY) {
     if (creep.memory.working) {
-        var successful = false
+        var move = false
         if (source instanceof Source)
-            successful = creep.harvest(source) == ERR_NOT_IN_RANGE
+            move = creep.harvest(source) == ERR_NOT_IN_RANGE
         else if(source instanceof Store || source instanceof Structure) 
-            successful = creep.withdraw(source) == ERR_NOT_IN_RANGE
-        if (!successful) 
+            move = creep.withdraw(source,resource) == ERR_NOT_IN_RANGE
+        if (move) 
             creep.moveTo(source)
     }
     else {
@@ -72,12 +76,41 @@ module.exports.build = function(creep,source,target,resource=RESOURCE_ENERGY) {
  */
 module.exports.harvest = function(creep,source,target,resource=RESOURCE_ENERGY) {
     if (creep.memory.working) {
+        //console.log("Harvest",creep.name,source.pos)
         if (creep.harvest(source,resource) == ERR_NOT_IN_RANGE) {
             creep.moveTo(source)
         }
     }
     else {
-        if (creep.transfer(target,resource) == ERR_NOT_IN_RANGE) {
+        //console.log("Transfer",creep.name,target.pos,Memory.ERRORS[creep.transfer(target,resource).toString()])
+        var rv = creep.transfer(target,resource)
+        if (rv == ERR_NOT_IN_RANGE) {
+            creep.moveTo(target) 
+        } else if (rv == ERR_FULL) {
+            //console.log("Full target", creep.name, target.pos)
+        }
+    }
+}
+
+
+/**
+ * Perform the duties of the upgrade role for the given creep
+ * @param {Creep} creep - The creep performing the transport actions
+ * @param {(Source|Store|Structure)} source - The source where the creep will acquire the resource
+ */
+module.exports.upgrade = function(creep,source) {
+    if (creep.memory.working) {
+        var move = false
+        if (source instanceof Source)
+            move = creep.harvest(source) == ERR_NOT_IN_RANGE
+        else if(source instanceof Store || source instanceof Structure) 
+            move = creep.withdraw(source,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+        if (move) 
+            creep.moveTo(source)
+    }
+    else {
+        var target = creep.room.controller
+        if (creep.transfer(target,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             creep.moveTo(target) 
         }
     }
@@ -93,9 +126,13 @@ module.exports.harvest = function(creep,source,target,resource=RESOURCE_ENERGY) 
  */
 module.exports.transport = function(creep,source,target,resource) {
     if (creep.memory.working) {
-        if (creep.withdraw(source,resource) == ERR_NOT_IN_RANGE) {
+        var move = false
+        if (source instanceof Source)
+            move = creep.harvest(source) == ERR_NOT_IN_RANGE
+        else if(source instanceof Store || source instanceof Structure) 
+            move = creep.withdraw(source,resource) == ERR_NOT_IN_RANGE
+        if (move) 
             creep.moveTo(source)
-        }
     }
     else {
         if (creep.transfer(target,resource) == ERR_NOT_IN_RANGE) {
@@ -104,3 +141,26 @@ module.exports.transport = function(creep,source,target,resource) {
     }
 }
 
+
+/**
+ * Perform the duties of the mechanic role for the given creep
+ * @param {Creep} creep - The creep performing the mechanic actions
+ * @param {(Source|Store|Structure)} source - The source where the creep will acquire the energy
+ * @param {Structure} target - The target that the creep will repair
+ */
+module.exports.repair = function(creep,source,target) {
+    if (creep.memory.working) {
+        var move = false
+        if (source instanceof Source)
+            move = creep.harvest(source) == ERR_NOT_IN_RANGE
+        else if(source instanceof Store || source instanceof Structure) 
+            move = creep.withdraw(source,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+        if (move) 
+            creep.moveTo(source)
+    }
+    else {
+        if (creep.repair(target) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(target) 
+        }
+    }
+}
