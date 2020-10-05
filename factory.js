@@ -10,10 +10,6 @@ module.exports.produce = function() {
         if(spawn.spawning != null || Memory.NUMERICS.CREEP_COUNT >= Memory.NUMERICS.CREEP_COUNT_EXPECTED)
             return
 
-        spawn.memory
-        if(!Object.keys(spawn).includes("NEXT_SPAWN")){
-            spawn.memory.NEXT_SPAWN = {"COST":-1,"ROLE":"","NAME":""}
-        }
 
         if(spawn.memory.NEXT_SPAWN.COST == -1) {
             spawn.memory.NEXT_SPAWN = this.findNext(spawn);
@@ -42,20 +38,42 @@ module.exports.determineCost = function(loadout) {
 
 
 /**
+ * Find the next role priorities for a given spawn
+ * @param {StructureSpawn} spawn - Which spawn to use
+ * @returns {Object} - An array of JSON objects containing the name and priority of each role
+ */
+function getPriorityArray(spawn) {
+    var roles = Memory.ROLES
+
+    //Change priorities based on current room conditions
+    if (spawn.room.find(FIND_CONSTRUCTION_SITES).length() == 0) {
+        
+    }
+
+    //roles['BUILDER']['base_priority']
+    var roleEntries = Object.entries(Memory.ROLES)
+    var roleNames = _.map(roleEntries,entry => {return {'name': entry[0],'priority': entry[1]['base_priority']}})
+    var roleOrdered = _.sortByOrder(roleNames,'priority')
+    //var roleNamesOrdered = _.map(roleNames,entry => {return entry['name']})
+    return roleOrdered
+}
+
+
+/**
  * Find the next creep that a given spawn may wish to build
  * @param {StructureSpawn} spawn - Which spawn to use
  * @returns {Object} - A JSON object containing the cost, role, and name of the potential next creep
  */
 module.exports.findNext = function(spawn) {
     for(var i = 0; i < Memory.NUMERICS.ROLES; i++) {
-        var roleName = Memory.ROLES.ROLE_PRIORITIES[i]
-        var role = Memory.ROLES.ROLES[roleName]
+        var roleName = Object.keys(Memory.ROLES)[i]
+        var role = Memory.ROLES[roleName]
 
         var build = false
         var worker_name
         for(var j = 1; j <= role.count; j++) {
             worker_name = role.name + j.toString()
-            var rv = this.create(Game.spawns.Spawn1,roleName,worker_name,true)
+            var rv = this.create(spawn,roleName,worker_name,true)
             if(rv == OK) {
                 build = true
                 break
@@ -82,9 +100,9 @@ module.exports.findNext = function(spawn) {
  * @returns {ScreepsReturnCode}
  */
 module.exports.create = function(spawn,roleName,name,dry=false) {
-    var role = Memory.ROLES.ROLES[roleName]
+    var role = Memory.ROLES[roleName]
     var rv = spawn.spawnCreep(role.loadouts[0],name,{"dryRun":dry,memory:{'role':role.name,'working':true}})
-    if(rv != OK && rv != ERR_NAME_EXISTS)
+    if(rv != OK && rv != ERR_NAME_EXISTS && !dry)
         console.log("Failed to create creep:",Memory.ERRORS[rv.toString()],"\n\t",spawn.name,roleName,name,dry)
     return rv
 }
@@ -97,7 +115,7 @@ module.exports.create = function(spawn,roleName,name,dry=false) {
  */
 module.exports.maintainRole = function(roleName) {
     var creating = false
-    var role = Memory.ROLES.ROLES[roleName]
+    var role = Memory.ROLES[roleName]
     for (var i = role.count; i > 0; i--) {
         var worker_name = role.name + i.toString()
         if(this.create(Game.spawns.Spawn1,roleName,worker_name) == OK)
